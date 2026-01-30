@@ -32,4 +32,4 @@ go.work.sum
 # .vscode/
 
 # Config file
-go-pattern/config/config.yaml
+config/config.yaml
