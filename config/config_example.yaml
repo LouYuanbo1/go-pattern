@@ -16,9 +16,9 @@ redis:
   protocol: 2
   unstable_resp3: true
   max_size: 10000
-  default_ttl: 5
+  default_ttl: 15
 local_cache:
   num_counters: 100000
   max_cost: 10000
   buffer_items: 64
-  default_ttl: 15
+  default_ttl: 10
