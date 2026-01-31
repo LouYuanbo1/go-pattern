@@ -81,7 +81,7 @@ func (a *AuthService) GenerateToken(id uint64, subject string) (string, error) {
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
 	tokenString, err := token.SignedString([]byte(a.secretKey))
 	if err != nil {
-		return "", fmt.Errorf("GenerateToken(userUtils): token 生成失败(Token Generate Failed): %w", err)
+		return "", fmt.Errorf("GenerateToken: token 生成失败(Token Generate Failed): %w", err)
 	}
 	return tokenString, nil
 }
@@ -93,19 +93,19 @@ func (a *AuthService) ParseToken(tokenString string) (*CustomClaims, error) {
 	token, err := jwt.ParseWithClaims(tokenString, claims, func(token *jwt.Token) (interface{}, error) {
 		// 关键安全检查：验证签名算法
 		if _, ok := token.Method.(*jwt.SigningMethodHMAC); !ok {
-			return nil, fmt.Errorf("GenerateToken(userUtils): unexpected signing method: %v", token.Header["alg"])
+			return nil, fmt.Errorf("GenerateToken: unexpected signing method: %v", token.Header["alg"])
 		}
 		return a.secretKey, nil
 	})
 	if err != nil {
 		//作用：检查错误 err 是否与目标错误 target 匹配
 		if errors.Is(err, jwt.ErrTokenExpired) {
-			return nil, fmt.Errorf("GenerateToken(userUtils): token 已过期(Token Expired): %w", err)
+			return nil, fmt.Errorf("GenerateToken: token 已过期(Token Expired): %w", err)
 		}
-		return nil, fmt.Errorf("GenerateToken(userUtils): token 解析失败(Token Parse Failed): %w", err)
+		return nil, fmt.Errorf("GenerateToken: token 解析失败(Token Parse Failed): %w", err)
 	}
 	if !token.Valid {
-		return nil, fmt.Errorf("GenerateToken(userUtils): token 无效(Token Invalid)")
+		return nil, fmt.Errorf("GenerateToken: token 无效(Token Invalid)")
 	}
 	return claims, nil
 }
